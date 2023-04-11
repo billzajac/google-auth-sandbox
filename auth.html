@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+
+<body>
+<div id="g_id_onload"
+     data-client_id="237091407305-s09hultg1pldqfv1nu1de783i60g15s7.apps.googleusercontent.com"
+     data-context="signin"
+     data-ux_mode="popup"
+     data-callback="onSignIn"
+     data-auto_prompt="false">
+</div>
+<div class="g_id_signin"
+     data-type="standard"
+     data-shape="rectangular"
+     data-theme="outline"
+     data-text="signin_with"
+     data-size="large"
+     data-logo_alignment="left">
+</div>
+<script>
+  function onSignIn(googleUser) {
+    console.log('onSignIn', googleUser);
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'https://billzajac.com/auth');
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onload = function() {
+      console.log('Signed in as: ' + xhr.responseText);
+    };
+    xhr.send('idtoken=' + googleUser["credential"]);
+  }
+  function onFailure(res) {
+    console.log('onFail', res);
+  }
+</script>
+
+</body>
+</html>
