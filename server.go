@@ -34,12 +34,15 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Read the body
-	// defer r.Body.Close()
-	// body, err := ioutil.ReadAll(r.Body)
-	// if err != nil {
-	// 	log.Printf("Error reading body: %s", r.URL.Path)
-	// }
-	// write_n_log(w, fmt.Sprintf("\r\n%s", body))
+	debug := false
+	if debug == true {
+		defer r.Body.Close()
+		body, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			log.Printf("Error reading body: %s", r.URL.Path)
+		}
+		write_n_log(w, fmt.Sprintf("\r\n%s", body))
+	}
 
 	// Now get the form data
 	err := r.ParseForm()
@@ -50,9 +53,8 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 	idtoken := r.PostFormValue("idtoken")
 	write_n_log(w, fmt.Sprintf("idtoken: %s\r\n", idtoken))
-	claims, _ := ValidateGoogleJWT(idtoken)
-	write_n_log(w, fmt.Sprintf("claims \r\n%+v\r\n", claims))
-
+	claims, err := ValidateGoogleJWT(idtoken)
+	write_n_log(w, fmt.Sprintf("claims\r\n%+v\r\nerror:%s\r\n", claims, err))
 }
 
 var port string
